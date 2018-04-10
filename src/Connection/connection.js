@@ -86,16 +86,22 @@ class Connection extends Component {
     // message to the main process to attempt to run `parity signer new-token`
     // automatically.
     if (!this.props.needsToken && needsToken) {
-      const { ipcRenderer } = electron;
+      const { remote } = electron;
+      const signerToken = remote.getGlobal('signerToken');
 
-      ipcRenderer.send('asynchronous-message', 'signer-new-token');
+      if (signerToken) {
+        this.onChangeToken(null, signerToken);
+        return;
+      }
 
-      ipcRenderer.once('asynchronous-reply', (_, arg) => {
-        if (!arg) { return; }
-        // If `parity signer new-token` has successfully given us a token back,
-        // then we submit it
-        this.onChangeToken(null, arg);
-      });
+      // ipcRenderer.send('asynchronous-message', 'signer-newn-token');
+
+      // ipcRenderer.once('asynchronous-reply', (_, arg) => {
+      //   if (!arg) { return; }
+      //   // If `parity signer new-token` has successfully given us a token back,
+      //   // then we submit it
+      //   this.onChangeToken(null, arg);
+      // });
     }
   }
 
@@ -118,9 +124,9 @@ class Connection extends Component {
   }
 
   render () {
-    const { isConnecting, isConnected } = this.props;
+    const { isConnecting, isConnected, needsToken } = this.props;
 
-    if (!isConnecting && isConnected && this.isVersionCorrect()) {
+    if (!isConnecting && isConnected && !needsToken && this.isVersionCorrect()) {
       return null;
     }
 
@@ -273,6 +279,8 @@ class Connection extends Component {
 
   onChangeToken = (event, _token) => {
     const { token, validToken } = this.validateToken(_token || event.target.value);
+
+    console.log(token, validToken);
 
     this.setState({ token, validToken }, () => {
       validToken && this.setToken();

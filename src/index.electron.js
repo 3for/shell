@@ -33,6 +33,7 @@ let mainWindow;
 global.dirName = __dirname;
 global.wsInterface = argv['ws-interface'];
 global.wsPort = argv['ws-port'];
+global.signerToken = argv['signer-token'];
 parityInstallLocation()
   .then((location) => { global.parityInstallLocation = location; })
   .catch(() => { });
