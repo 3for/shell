@@ -52,6 +52,11 @@ git checkout next
 
 Then run the following:
 
+Before the npm install, set taobao mirror environment while trying to build in China due to the network reasons.
+```bash
+export ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/"
+```
+
 ```bash
 npm install
 npm run electron
