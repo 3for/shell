@@ -52,6 +52,12 @@ git checkout next
 
 Then run the following:
 
+   Set electron mirror environment while building in China due to network reasons:
+   
+```bash
+export ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/"
+```
+
 ```bash
 npm install
 npm run electron
